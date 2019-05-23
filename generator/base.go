@@ -207,7 +207,7 @@ func generateDescTablePart(field *types.StructField) string {
 			removeStringsPrefix(
 				GetStringsWithoutPrefix(field.Docs, prefixExample),
 				prefixComment,
-			), lineBreak,
+			), " ",
 		),
 	)
 }
