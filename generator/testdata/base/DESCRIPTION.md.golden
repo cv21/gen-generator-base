@@ -12,26 +12,25 @@ Also it useful for building json config example.|
 
 #### Config Example:
 
-```js
-	{
-		"files": [
-			{
-				"path": "...",
-				"generators": [
-				{
-					"repository": "github.com/cv21/gen-generator-base",
-					"version": "v1.0.0",
-					"params": {
-						"generator_name":"Mock",
-						"module_repository":"github.com/cv21/gen-generator-mock",
-						"module_query":"1.0.0",
-						"params_structure_name":"generatorParams"
-					}
-				}
-			]
-			}
-		]
-	}
-
+```json
+{
+    "files": [
+        {
+            "path": "...",
+            "generators": [
+                {
+                    "repository": "github.com/cv21/gen-generator-base",
+                    "version": "v1.0.0",
+                    "params": {
+                        "generator_name":"Mock",
+                        "module_repository":"github.com/cv21/gen-generator-mock",
+                        "module_query":"1.0.0",
+                        "params_structure_name":"generatorParams"
+                    }
+                }
+            ]
+        }
+    ]
+}
 ```
 

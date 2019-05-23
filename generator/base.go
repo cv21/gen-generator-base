@@ -127,24 +127,23 @@ func (m *baseGenerator) generateDescFile(p *generatorParams, parsedGeneratorPara
 	f += fmt.Sprintf(`
 #### Config Example:
 
-`+"```"+`js
-	{
-		"files": [
-			{
-				"path": "...",
-				"generators": [
-				{
-					"repository": "%s",
-					"version": "%s",
-					"params": {
-						%s
-					}
-				}
-			]
-			}
-		]
-	}
-
+`+"```"+`json
+{
+    "files": [
+        {
+            "path": "...",
+            "generators": [
+                {
+                    "repository": "%s",
+                    "version": "%s",
+                    "params": {
+                        %s
+                    }
+                }
+            ]
+        }
+    ]
+}
 `+"```"+`
 
 `, p.ModuleRepository, p.ModuleQuery, buildJsonConfigExample(parsedGeneratorParams))
@@ -182,7 +181,7 @@ func buildJsonConfigExample(s *types.Struct) (r string) {
 		}
 
 		if i != 0 {
-			p = "\t\t\t\t\t\t" + p
+			p = "                        " + p
 		}
 
 		r += p
