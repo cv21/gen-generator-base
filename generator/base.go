@@ -24,12 +24,20 @@ const (
 
 type (
 	generatorParams struct {
+		// Readme headline.
 		// Example: Mock
 		GeneratorName string `json:"generator_name"`
+
+		// It is necessary for plugin registration.
+		// Also it useful for building json config example.
 		// Example: github.com/cv21/gen-generator-mock
 		ModuleRepository string `json:"module_repository"`
+
+		// It is necessary for plugin registration along with ModuleRepository.
 		// Example: 1.0.0
 		ModuleQuery string `json:"module_query"`
+
+		// It is name of params structure which holds all generator params.
 		// Example: generatorParams
 		ParamsStructureName string `json:"params_structure_name"`
 	}
@@ -119,7 +127,7 @@ func (m *baseGenerator) generateDescFile(p *generatorParams, parsedGeneratorPara
 	f += fmt.Sprintf(`
 #### Config Example:
 
-`+"```"+`json
+`+"```"+`js
 	{
 		"files": [
 			{
