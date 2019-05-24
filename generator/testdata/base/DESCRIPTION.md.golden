@@ -4,10 +4,10 @@
 #### Generator Parameters
 | Parameter Key | Example | Description |
 | --- | --- | --- |
-|generator_name|Mock|Readme headline.|
-|module_repository|github.com/cv21/gen-generator-mock|It is necessary for plugin registration. Also it useful for building json config example.|
-|module_query|1.0.0|It is necessary for plugin registration along with ModuleRepository.|
-|params_structure_name|generatorParams|It is name of params structure which holds all generator params.|
+|`generator_name`|`Mock`|Readme headline.|
+|`module_repository`|`github.com/cv21/gen-generator-mock`|It is necessary for plugin registration. Also it useful for building json config example.|
+|`module_query`|`1.0.0`|It is necessary for plugin registration along with ModuleRepository.|
+|`params_structure_name`|`generatorParams`|It is name of params structure which holds all generator params.|
 
 #### Config Example:
 

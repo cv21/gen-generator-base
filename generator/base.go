@@ -200,7 +200,7 @@ func removeStringsPrefix(s []string, prefix string) (r []string) {
 
 func generateDescTablePart(field *types.StructField) string {
 	return fmt.Sprintf(
-		"|%s|%s|%s|\n",
+		"|`%s`|`%s`|%s|\n",
 		field.Tags["json"][0],
 		strings.TrimPrefix(GetStringByPrefix(field.Docs, prefixExample), prefixExample),
 		strings.Join(
