@@ -14,7 +14,7 @@ const (
 	mainFilePath        = "./main.go"
 	descriptionFilePath = "./DESCRIPTION.md"
 	moduleRepository    = "github.com/cv21/gen-generator-base"
-	moduleQuery         = "1.0.0"
+	moduleQuery         = "1.0.1"
 
 	prefixExample = "// Example: "
 
