@@ -18,7 +18,7 @@ Also you can check main.go file of this plugin.
 ```go
 type (
 	generatorParams struct {
-		// Example: SomeName
-		GeneratorName string `json:"generator_name"`
+		// Example: generatorParams
+		ParamsStructureName string `json:"params_structure_name"`
 		...
 ```

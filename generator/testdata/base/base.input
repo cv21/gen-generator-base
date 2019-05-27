@@ -24,18 +24,11 @@ const (
 
 type (
 	generatorParams struct {
-		// Readme headline.
-		// Example: Mock
-		GeneratorName string `json:"generator_name"`
-
 		// It is necessary for plugin registration.
-		// Also it useful for building json config example.
-		// Example: github.com/cv21/gen-generator-mock
-		ModuleRepository string `json:"module_repository"`
-
-		// It is necessary for plugin registration along with ModuleRepository.
-		// Example: 1.0.0
-		ModuleQuery string `json:"module_query"`
+		// Also it is useful for building config example.
+		// It is better to use module queries if your generator supports versioning.
+		// Example: github.com/cv21/gen-generator-mock@v1.0.0
+		Repository string `json:"repository"`
 
 		// It is name of params structure which holds all generator params.
 		// Example: generatorParams
@@ -108,17 +101,16 @@ func main() {
 		},
 	})
 }
-`, moduleRepository, moduleQuery, p.ModuleRepository, buildRepositoryWithQuery(p.ModuleRepository, p.ModuleQuery)))
+`, moduleRepository, moduleQuery, repositoryPath(p.RepositoryVersion), p.RepositoryVersion))
 }
 
 func (m *baseGenerator) generateDescFile(p *generatorParams, parsedGeneratorParams *types.Struct, parsedGeneratorMethod *types.Method) []byte {
-	f := fmt.Sprintf(`# %s
-%s
+	f := fmt.Sprintf(`%s
 
 #### Generator Parameters
-| Parameter Key | Example | Description |
-| --- | --- | --- |
-`, p.GeneratorName, strings.Join(removeStringsPrefix(GetStringsWithoutPrefix(parsedGeneratorMethod.Docs, prefixComment), prefixExample), lineBreak))
+| Parameter Key | Type | Example | Description |
+| --- | --- | --- | --- |
+`, strings.Join(removeStringsPrefix(GetStringsWithoutPrefix(parsedGeneratorMethod.Docs, prefixComment), prefixExample), lineBreak))
 
 	for _, field := range parsedGeneratorParams.Fields {
 		f += generateDescTablePart(&field)
@@ -127,27 +119,15 @@ func (m *baseGenerator) generateDescFile(p *generatorParams, parsedGeneratorPara
 	f += fmt.Sprintf(`
 #### Config Example:
 
-`+"```"+`js
-	{
-		"files": [
-			{
-				"path": "...",
-				"generators": [
-				{
-					"repository": "%s",
-					"version": "%s",
-					"params": {
-						%s
-					}
-				}
-			]
-			}
-		]
-	}
-
+`+"```"+`yaml
+files:
+  - path: ...
+    repository: %s
+    params:
+%s
 `+"```"+`
 
-`, p.ModuleRepository, p.ModuleQuery, buildJsonConfigExample(parsedGeneratorParams))
+`, p.RepositoryVersion, buildYamlConfigExample(parsedGeneratorParams))
 
 	return []byte(f)
 }
@@ -174,18 +154,13 @@ func GetStringsWithoutPrefix(docs []string, prefix string) []string {
 	return b
 }
 
-func buildJsonConfigExample(s *types.Struct) (r string) {
+func buildYamlConfigExample(s *types.Struct) (r string) {
 	for i, f := range s.Fields {
-		p := fmt.Sprintf(`"%s":"%s"`, f.Tags["json"][0], strings.TrimPrefix(GetStringByPrefix(f.Docs, prefixExample), prefixExample))
-		if i < len(s.Fields)-1 {
-			p += "," + lineBreak
+		p := fmt.Sprintf(`%s: %s`, f.Tags["json"][0], strings.TrimPrefix(GetStringByPrefix(f.Docs, prefixExample), prefixExample))
+		if i != len(s.Fields) - 1 {
+			p = p + lineBreak
 		}
-
-		if i != 0 {
-			p = "\t\t\t\t\t\t" + p
-		}
-
-		r += p
+		r += "      " + p
 	}
 
 	return
@@ -201,18 +176,19 @@ func removeStringsPrefix(s []string, prefix string) (r []string) {
 
 func generateDescTablePart(field *types.StructField) string {
 	return fmt.Sprintf(
-		"|%s|%s|%s|\n",
+		"|`%s`|`%s`|`%s`|%s|\n",
 		field.Tags["json"][0],
+		field.Type.String(),
 		strings.TrimPrefix(GetStringByPrefix(field.Docs, prefixExample), prefixExample),
 		strings.Join(
 			removeStringsPrefix(
 				GetStringsWithoutPrefix(field.Docs, prefixExample),
 				prefixComment,
-			), lineBreak,
+			), " ",
 		),
 	)
 }
 
-func buildRepositoryWithQuery(repo, query string) string {
-	return fmt.Sprintf("%s@%s", repo, query)
+func repositoryPath(repoWithQuery string) string {
+	return strings.Split(repoWithQuery, "@")[0]
 }
